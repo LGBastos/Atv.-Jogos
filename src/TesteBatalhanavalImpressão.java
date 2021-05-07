@@ -1,5 +1,7 @@
 import java.util.Scanner;
 //TODO Implementar uma pausa entre os turnos?
+// Pra testar o git, adiciona o nome de vocês nesse comentario:
+//Lucas Bastos ; 
 
 
 public class TesteBatalhanavalImpressão {
@@ -27,7 +29,7 @@ public class TesteBatalhanavalImpressão {
 
 	private static void gameStart(String[] nicks, int[][] memoria, int[][] memoria2, char[][] posicao, char[][] posicao2, int vidaP1, int vidaP2, Scanner sc) {
 		//Enquanto tiver o gameEnd(chamado no final do gameTurn não precisaria da condição no while(poderia ser true)
-		while(vidaP1>0||vidaP2>0) {
+		while(true) {
 			vidaP2 = gameTurn(nicks[0], memoria, posicao2,vidaP2, sc);
 			imprimir("vidaP1="+vidaP1+"vidaP2="+vidaP2);
 			vidaP1 = gameTurn(nicks[1], memoria2, posicao, vidaP1, sc);
