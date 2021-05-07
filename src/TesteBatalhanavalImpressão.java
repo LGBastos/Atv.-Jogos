@@ -1,5 +1,6 @@
 import java.util.Scanner;
 //TODO Implementar uma pausa entre os turnos?
+//testando como funcionam Branches
 // Pra testar o git, adiciona o nome de vocês nesse comentario:
 //Lucas Bastos ; 
 
