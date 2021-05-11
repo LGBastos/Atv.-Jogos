@@ -1,13 +1,12 @@
+package projeto_games;
 import java.util.Scanner;
 //TODO Implementar uma pausa entre os turnos?
-// Pra testar o git, adiciona o nome de vocês nesse comentario:
-//Lucas Bastos ; 
-//Lucas Moreno;
 
 
-public class TesteBatalhanavalImpressão {
 
-	public static void main(String[] args) {
+public class BatalhaNaval {
+
+	public static void inicio() {
 		Scanner sc = new Scanner(System.in);
 		int vidaP1 = 3, vidaP2 = 3;
 		String[] nicks = new String[2];
@@ -53,9 +52,9 @@ public class TesteBatalhanavalImpressão {
 		//coloca X nos pontos entre pontoInicial e pontoFinal
 		imprimir(apelido+" definia a posiçao do porta aviões.\n"
 				+ "Escolha o ponto de inicio, ex: 0 5");
-		int[] pontoInicial = {sc.nextInt(), sc.nextInt()};
+		int[] pontoInicial = checarPontoInicial(sc);
 
-		// TODO implementar: mostrar as posiçoes validas para o pontoFinal
+		
 		imprimir("Agora, escolha entre os possíveis pontos de fim: ");
 		int[] pontoFinal = checarPosicoesValidas(pontoInicial, sc);
 
@@ -89,6 +88,17 @@ public class TesteBatalhanavalImpressão {
 		}
 
 	}
+	private static int[] checarPontoInicial(Scanner sc) {
+		int[] pontoInicial = new int[2];
+		do {
+			pontoInicial[0] = sc.nextInt();
+			pontoInicial[1] = sc.nextInt();
+		}while(pontoInicial[0]<9&&pontoInicial[0]>0&&pontoInicial[1]<9&&pontoInicial[1]>0);
+		
+		
+		return pontoInicial;
+	}
+
 	private static void createBoard(char[][] posicao) {
 		for (int i = 0; i < posicao.length; i++) {
 			for (int j = 0; j < posicao.length; j++) {
@@ -134,16 +144,22 @@ public class TesteBatalhanavalImpressão {
 
 		int[] tiro = {sc.nextInt(),sc.nextInt()};
 		memoria[tiro[0]][tiro[1]]=1;
-		vida = drawBoard(tiro, memoria, posicao, vida);
-		if(vida==0) {
+		int vidaAtt = drawBoard(tiro, memoria, posicao, vida);
+		if(vidaAtt==0) {
 			gameEnd(string);
 		}
-		return vida;
+		if(vidaAtt<vida) {
+			imprimir("Acertou!\n"
+					+ "Jogue novamente:");
+			
+			gameTurn(string, memoria, posicao, vidaAtt, sc);
+		}
+		return vidaAtt;
 
 
 
 	}
-
+	// TODO trocar para checarTiro e não desenhar, somente checar se acertou
 	private static int drawBoard(int[] tiro, int[][] memoria, char[][] posicao, int vida) {
 		boolean hit = false;
 		for (int i = 0; i < 11; i++) {
@@ -174,11 +190,10 @@ public class TesteBatalhanavalImpressão {
 
 			}
 		}
-		if(hit) {
-			imprimir("Acertou!");
-		}else {
-			imprimir("Água!");
+		if(!hit) {
+			imprimir("Água!");			
 		}
+		
 		return vida;
 		
 	}
