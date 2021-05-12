@@ -17,22 +17,19 @@ public class BatalhaNaval {
 		int[][] memoria = new int[10][10];
 		int[][] memoria2 = new int[10][10];
 		
-		gameStart(nicks, memoria, memoria2, posicao, posicao2,vidaP1, vidaP2, sc);
-
-
+		gameStart(nicks, memoria, memoria2, posicao, posicao2,sc);
+		
 	}
 
-	private static void gameStart(String[] nicks, int[][] memoria, int[][] memoria2, char[][] posicao, char[][] posicao2, int vidaP1, int vidaP2, Scanner sc) {
+	private static void gameStart(String[] nicks, int[][] memoria, int[][] memoria2, char[][] posicao, char[][] posicao2, Scanner sc) {
 		createBoard(posicao);
 		createBoard(posicao2);
 		imprimir("Escolha o apelido do Player 1:");
 		nicks[0]=sc.nextLine();
 		imprimir("Escolha o apelido do Player 2:");
 		nicks[1]=sc.nextLine();
-		posInput(nicks[0], sc, posicao);
-		posInput(nicks[1], sc, posicao2);
-		BatalhaNaval.vidaP1 = 5;
-		BatalhaNaval.vidaP2 = 5;
+		posInput(nicks[0], sc, posicao, vidaP1);
+		posInput(nicks[1], sc, posicao2, vidaP2);
 		GAME_ON = true;
 		while(GAME_ON) {
 			//turno do player 1
@@ -49,57 +46,129 @@ public class BatalhaNaval {
 	private static void gameEnd(String string) {
 		imprimir("Vitória de "+string+"!!!");
 		GAME_ON = false;
+		vidaP1 = 0;
+		vidaP2 = 0;
+		
 
 	}
 
-	private static void posInput(String apelido, Scanner sc, char[][] posicao) {
-		// TODO criar switch case para cada navio
+	private static void posInput(String apelido, Scanner sc, char[][] posicao, int vida) {
+//		(1) porta-aviões (cinco quadrados), (2) navios-tanque (quatro quadrados), 
+//		(3) contratorpedeiros (três quadrados) e (4) submarinos (dois quadrados)
+		int naviosCont = 4;
+		int navios = 4;
+		int[] cont = {1, 2, 3, 4};
 		
+		while(naviosCont!=0) {
+			imprimir(apelido +" escolha qual navio deseja posicionar:");
+			for(int j = 1 ; j<=naviosCont ; j++) {
+					
+				switch (cont[j-1]) {
+				case (1):
+					imprimir("("+j+") porta-aviões (cinco quadrados)" );
+					break;
+				case (2):
+					imprimir("("+j+") navios-tanque (quatro quadrados)");
+					break;
+				case(3):
+					imprimir("("+j+") contratorpedeiros (três quadrados)");
+					break;
+				case(4):
+					imprimir("("+j+")  submarinos (dois quadrados)");
+					break;
+				default:
+					throw new IllegalArgumentException("Unexpected value: " + j);
+				}
+			}
+			int input = sc.nextInt();
+			int escolha = cont[input-1];
+			
+			for(int i=input-1 ; i< navios-1 ; i++) {
+				cont[i]=cont[i+1];
+			}
+				
+			
+			
+			switch (escolha) {
+			case (1):
+				definirPosicao(apelido, "porta-aviões", 5, sc, posicao, vida);
+				System.out.println(vida);
+				naviosCont--;
+				break;
+			case (2):
+				definirPosicao(apelido, "navios-tanque", 4, sc, posicao, vida);
+				System.out.println(vida);
+				naviosCont--;
+				break;
+			case(3):
+				definirPosicao(apelido, "contratorpedeiros", 3, sc, posicao, vida);
+				System.out.println(vida);
+				naviosCont--;
+				break;
+			case(4):
+				definirPosicao(apelido, "submarinos ", 2, sc, posicao, vida);
+				System.out.println(vida);
+				naviosCont--;
+				break;
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + input);
+			}
+		}
+		
+		
+
+	}
+	
+	private static void definirPosicao(String apelido, String tipoNavio, int tamanho, Scanner sc, char[][] posicao, int vida) {
 		//coloca X nos pontos entre pontoInicial e pontoFinal
-		imprimir(apelido+" definia a posiçao do porta aviões.\n"
-				+ "Escolha o ponto de inicio, ex: 0 5");
-		int[] pontoInicial = checarPontoInicial(sc);
+				imprimir(apelido+" definia a posiçao do "+tipoNavio+".\n"
+						+ "Escolha o ponto de inicio, ex: 0 5");
+				int[] pontoInicial = checarPontoInicial(sc);
 
+				
+				imprimir("Agora, escolha entre os possíveis pontos de fim: ");
+				int[] pontoFinal = checarPosicoesValidas(pontoInicial, sc, tamanho);
+
+				
+				int distancia, index0, index1;
+				//index = 1 quando pontoFinal for maior que inicial e -1 quando for menor.
+				if(pontoInicial[0]!=pontoFinal[0]) {
+					//se a diferença for na linha
+					distancia = pontoFinal[0]-pontoInicial[0];
+					if(distancia>0) {
+						index0 = 1;
+					}else {
+						index0 = -1;
+						distancia *= -1;
+					}
+					index1 = 0;
+				}else {
+					// se a diferença for na coluna
+					distancia = pontoFinal[1]-pontoInicial[1];
+					index0 = 0;
+					if(distancia>0) {
+						index1 = 1;
+					}else {
+						index1 = -1;
+						distancia *= -1;
+					}
+
+				}
+				//Quando index = 0 não altera a linha/coluna, quando index=1 começa no ponto 
+				//Final e diminui até o Inicial, quando index=-1 começa no ponto Final e aumenta até o Inicial
+				for (int i = 0; i <= distancia; i++) {
+					posicao[pontoFinal[0]+(-i*index0)][pontoFinal[1]+(-i*index1)]= 'X';
+					vida++;
+				}
 		
-		imprimir("Agora, escolha entre os possíveis pontos de fim: ");
-		int[] pontoFinal = checarPosicoesValidas(pontoInicial, sc);
-
-		// TODO testar: o que acontece quando pontoFinal<pontoInicial
-		int distancia, index0, index1;
-		if(pontoInicial[0]!=pontoFinal[0]) {
-			//se a diferença for na linha
-			distancia = pontoFinal[0]-pontoInicial[0];
-			if(distancia>0) {
-				index0 = 1;
-			}else {
-				index0 = -1;
-				distancia *= -1;
-			}
-			index1 = 0;
-		}else {
-			// se a diferença for na coluna
-			distancia = pontoFinal[1]-pontoInicial[1];
-			index0 = 0;
-			if(distancia>0) {
-				index1 = 1;
-			}else {
-				index1 = -1;
-				distancia *= -1;
-			}
-
-		}
-		//TODO testar i<distancia
-		for (int i = 0; i <= distancia; i++) {
-			posicao[pontoFinal[0]+(-i*index0)][pontoFinal[1]+(-i*index1)]= 'X';
-		}
-
 	}
+
 	private static int[] checarPontoInicial(Scanner sc) {
 		int[] pontoInicial = new int[2];
 		do {
 			pontoInicial[0] = sc.nextInt();
 			pontoInicial[1] = sc.nextInt();
-		}while(pontoInicial[0]<9&&pontoInicial[0]>0&&pontoInicial[1]<9&&pontoInicial[1]>0);
+		}while(!(pontoInicial[0]<=9&&pontoInicial[0]>=0&&pontoInicial[1]<=9&&pontoInicial[1]>=0));
 		
 		
 		return pontoInicial;
@@ -230,8 +299,8 @@ public class BatalhaNaval {
 	
 	
 	
-	private static int[] checarPosicoesValidas(int[] posicaoInicial, Scanner sc) {
-		int tamanhoNavio = 3;
+	private static int[] checarPosicoesValidas(int[] posicaoInicial, Scanner sc, int tamanhoNavio) {
+
 		int paraEsquerda = posicaoInicial[1]-tamanhoNavio+1;
 		int paraDireita = posicaoInicial[1]+tamanhoNavio-1;
 		int paraCima = posicaoInicial[0]-tamanhoNavio+1;
