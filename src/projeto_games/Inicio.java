@@ -9,7 +9,7 @@ public class Inicio {
 		int option = 0;
 		
 		do {
-			impressao("--------------------------------------");
+			impressao("-----------------------------------------");
 			impressao("Qual jogo você deseja jogar?");
 			impressao("(1) Jogo da Forca\n(2) Batalha Naval\n(3) Jogo da Velha\n(4) Sair");
 			option = sc.nextInt();
