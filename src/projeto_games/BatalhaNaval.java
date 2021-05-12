@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class BatalhaNaval {
 	public static boolean GAME_ON;
-	public static int vidaP1 = 3, vidaP2 = 3;
+	public static int vidaP1, vidaP2;
 	public static void inicio() {
 		Scanner sc = new Scanner(System.in);
 		
@@ -16,6 +16,13 @@ public class BatalhaNaval {
 		char[][] posicao2 = new char[10][10];
 		int[][] memoria = new int[10][10];
 		int[][] memoria2 = new int[10][10];
+		
+		gameStart(nicks, memoria, memoria2, posicao, posicao2,vidaP1, vidaP2, sc);
+
+
+	}
+
+	private static void gameStart(String[] nicks, int[][] memoria, int[][] memoria2, char[][] posicao, char[][] posicao2, int vidaP1, int vidaP2, Scanner sc) {
 		createBoard(posicao);
 		createBoard(posicao2);
 		imprimir("Escolha o apelido do Player 1:");
@@ -24,13 +31,8 @@ public class BatalhaNaval {
 		nicks[1]=sc.nextLine();
 		posInput(nicks[0], sc, posicao);
 		posInput(nicks[1], sc, posicao2);
-		gameStart(nicks, memoria, memoria2, posicao, posicao2,vidaP1, vidaP2, sc);
-
-
-	}
-
-	private static void gameStart(String[] nicks, int[][] memoria, int[][] memoria2, char[][] posicao, char[][] posicao2, int vidaP1, int vidaP2, Scanner sc) {
-		
+		BatalhaNaval.vidaP1 = 5;
+		BatalhaNaval.vidaP2 = 5;
 		GAME_ON = true;
 		while(GAME_ON) {
 			//turno do player 1
@@ -46,13 +48,13 @@ public class BatalhaNaval {
 
 	private static void gameEnd(String string) {
 		imprimir("Vitória de "+string+"!!!");
-		//TODO quando adicionar os outros jogos, não pode sair, precisa voltar para o menu;
 		GAME_ON = false;
 
 	}
 
 	private static void posInput(String apelido, Scanner sc, char[][] posicao) {
 		// TODO criar switch case para cada navio
+		
 		//coloca X nos pontos entre pontoInicial e pontoFinal
 		imprimir(apelido+" definia a posiçao do porta aviões.\n"
 				+ "Escolha o ponto de inicio, ex: 0 5");
