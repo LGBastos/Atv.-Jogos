@@ -5,10 +5,11 @@ import java.util.Scanner;
 
 
 public class BatalhaNaval {
-
+	public static boolean GAME_ON;
+	public static int vidaP1 = 3, vidaP2 = 3;
 	public static void inicio() {
 		Scanner sc = new Scanner(System.in);
-		int vidaP1 = 3, vidaP2 = 3;
+		
 		String[] nicks = new String[2];
 		char[][] posicao = new char[10][10];
 		char[][] posicao2 = new char[10][10];
@@ -28,12 +29,14 @@ public class BatalhaNaval {
 	}
 
 	private static void gameStart(String[] nicks, int[][] memoria, int[][] memoria2, char[][] posicao, char[][] posicao2, int vidaP1, int vidaP2, Scanner sc) {
-		//Enquanto tiver o gameEnd(chamado no final do gameTurn não precisaria da condição no while(poderia ser true)
-		while(true) {
+		
+		GAME_ON = true;
+		while(GAME_ON) {
+			//turno do player 1
 			vidaP2 = gameTurn(nicks[0], memoria, posicao2,vidaP2, sc);
-			imprimir("vidaP1="+vidaP1+"vidaP2="+vidaP2);
+			//turno do player 2
 			vidaP1 = gameTurn(nicks[1], memoria2, posicao, vidaP1, sc);
-			imprimir("VidaP1="+vidaP1+"vidaP2="+vidaP2);
+			
 		}
 
 
@@ -43,7 +46,7 @@ public class BatalhaNaval {
 	private static void gameEnd(String string) {
 		imprimir("Vitória de "+string+"!!!");
 		//TODO quando adicionar os outros jogos, não pode sair, precisa voltar para o menu;
-		System.exit(0);
+		GAME_ON = false;
 
 	}
 
@@ -109,7 +112,9 @@ public class BatalhaNaval {
 	}
 
 	private static int gameTurn(String string, int[][] memoria, char[][] posicao, int vida, Scanner sc) {
-
+		if(GAME_ON==false) return 0;
+		
+		imprimir("vidaP1="+vidaP1+"vidaP2="+vidaP2);
 		//		int[] tiro= {-1,0};
 		//		do{
 		//			if(tiro[0]!=-1) {
@@ -147,8 +152,7 @@ public class BatalhaNaval {
 		int vidaAtt = drawBoard(tiro, memoria, posicao, vida);
 		if(vidaAtt==0) {
 			gameEnd(string);
-		}
-		if(vidaAtt<vida) {
+		}else if(vidaAtt<vida) {
 			imprimir("Acertou!\n"
 					+ "Jogue novamente:");
 			
