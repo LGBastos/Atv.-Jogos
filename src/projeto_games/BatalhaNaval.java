@@ -27,8 +27,8 @@ public class BatalhaNaval {
 		nicks[0]=sc.nextLine();
 		imprimir("Escolha o apelido do Player 2:");
 		nicks[1]=sc.nextLine();
-		posInput(nicks[0], sc, posicao, vidaP1);
-		posInput(nicks[1], sc, posicao2, vidaP2);
+		vidaP1 = posInput(nicks[0], sc, posicao, vidaP1);
+		vidaP2 = posInput(nicks[1], sc, posicao2, vidaP2);
 		GAME_ON = true;
 		while(GAME_ON) {
 			//turno do player 1
@@ -51,7 +51,7 @@ public class BatalhaNaval {
 
 	}
 
-	private static void posInput(String apelido, Scanner sc, char[][] posicao, int vida) {
+	private static int posInput(String apelido, Scanner sc, char[][] posicao, int vida) {
 //		(1) porta-aviões (cinco quadrados), (2) navios-tanque (quatro quadrados), 
 //		(3) contratorpedeiros (três quadrados) e (4) submarinos (dois quadrados)
 		int naviosCont = 4;
@@ -90,22 +90,22 @@ public class BatalhaNaval {
 			
 			switch (escolha) {
 			case (1):
-				definirPosicao(apelido, "porta-aviões", 5, sc, posicao, vida);
+				vida = definirPosicao(apelido, "porta-aviões", 5, sc, posicao, vida);
 				System.out.println(vida);
 				naviosCont--;
 				break;
 			case (2):
-				definirPosicao(apelido, "navios-tanque", 4, sc, posicao, vida);
+				vida = definirPosicao(apelido, "navios-tanque", 4, sc, posicao, vida);
 				System.out.println(vida);
 				naviosCont--;
 				break;
 			case(3):
-				definirPosicao(apelido, "contratorpedeiros", 3, sc, posicao, vida);
+				vida = definirPosicao(apelido, "contratorpedeiros", 3, sc, posicao, vida);
 				System.out.println(vida);
 				naviosCont--;
 				break;
 			case(4):
-				definirPosicao(apelido, "submarinos ", 2, sc, posicao, vida);
+				vida = definirPosicao(apelido, "submarinos ", 2, sc, posicao, vida);
 				System.out.println(vida);
 				naviosCont--;
 				break;
@@ -114,11 +114,13 @@ public class BatalhaNaval {
 			}
 		}
 		
+		return vida;
+		
 		
 
 	}
 	
-	private static void definirPosicao(String apelido, String tipoNavio, int tamanho, Scanner sc, char[][] posicao, int vida) {
+	private static int definirPosicao(String apelido, String tipoNavio, int tamanho, Scanner sc, char[][] posicao, int vida) {
 		//coloca X nos pontos entre pontoInicial e pontoFinal
 				imprimir(apelido+" definia a posiçao do "+tipoNavio+".\n"
 						+ "Escolha o ponto de inicio, ex: 0 5");
@@ -158,7 +160,9 @@ public class BatalhaNaval {
 				for (int i = 0; i <= distancia; i++) {
 					posicao[pontoFinal[0]+(-i*index0)][pontoFinal[1]+(-i*index1)]= 'X';
 					vida++;
+					System.out.println(vida);
 				}
+				return vida;
 		
 	}
 
@@ -184,7 +188,7 @@ public class BatalhaNaval {
 
 	private static int gameTurn(String string, int[][] memoria, char[][] posicao, int vida, Scanner sc) {
 		if(GAME_ON==false) return 0;
-		
+		//TODO mudar o imprimir vida
 		imprimir("vidaP1="+vidaP1+"vidaP2="+vidaP2);
 		//		int[] tiro= {-1,0};
 		//		do{
@@ -227,7 +231,7 @@ public class BatalhaNaval {
 			imprimir("Acertou!\n"
 					+ "Jogue novamente:");
 			
-			gameTurn(string, memoria, posicao, vidaAtt, sc);
+			vidaAtt = gameTurn(string, memoria, posicao, vidaAtt, sc);
 		}
 		return vidaAtt;
 
@@ -240,28 +244,28 @@ public class BatalhaNaval {
 		for (int i = 0; i < 11; i++) {
 			
 			
-			for (int j = 0; j < 41; j++) {
-				System.out.print("-");
-			}
-			System.out.println();
+//			for (int j = 0; j < 41; j++) {
+//				System.out.print("-");
+//			}
+//			System.out.println();
 		
 		
 			
 			if(i<10) {
 				for (int j = 0; j < 10; j++) {
 					if(memoria[i][j]==1) {
-						System.out.print("| "+posicao[i][j]+" ");
+//						System.out.print("| "+posicao[i][j]+" ");
 						if (posicao[i][j]=='X'&i==tiro[0]&&j==tiro[1]) {
 							vida--;
 							hit = true;
 						}
 					}else {
-						System.out.print("|   ");
+//						System.out.print("|   ");
 						
 					}
 
 				}
-				System.out.println();
+//				System.out.println();
 
 			}
 		}
