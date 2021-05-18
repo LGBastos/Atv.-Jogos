@@ -52,6 +52,17 @@ public class Forca {
 			}
 		}
 		jogVenc(erro);
+		jogarNovamente();
+	}
+
+	public static void jogarNovamente() {
+		System.out.println("Jogar novamente?\n"
+				+ "(1)Sim\t(2)Não");
+		int op = ed.nextInt();
+		if (op==1) {
+			Forca.inicio();
+		}
+		
 	}
 
 	public static void sublin(String palavra) {
