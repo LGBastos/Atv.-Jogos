@@ -1,7 +1,7 @@
 package projeto_games;
 import java.util.Scanner;
-//TODO Implementar uma pausa entre os turnos? 
-
+//TODO Implementar uma pausa entre os turnos?
+//TODO retirar memoria2, não nescessária.
 
 
 public class BatalhaNaval {
@@ -13,9 +13,8 @@ public class BatalhaNaval {
 		String[] nicks = new String[2];
 		char[][] posicao = new char[10][10];
 		char[][] posicao2 = new char[10][10];
-		//cuida os ponto nos quais foram atirados
+		//cuida os pontos nos quais foram atirados
 		int[][] memoria = new int[10][10];
-		//cuida onde os navios estão sendo inseridos e se não existe colisao(2 navios não podem ocupar o memso ponto)
 		int[][] memoria2 = new int[10][10];
 		
 		gameStart(nicks, memoria, memoria2, posicao, posicao2,sc);
@@ -61,12 +60,11 @@ public class BatalhaNaval {
 		
 		int input = -1;
 //		numero total de naios
-		int navios = 4;
+		final int NAVIOS = 4;
 		//controla quais navios são mostrados na tela, independente da ordem de escolha.
 		int[] cont = {1, 2, 3, 4};
 		//cuida para que 2 navios não ocupem um mesmo ponto
 		int[][]memoriaTemporariaDePosicao = new int[10][10];
-		
 		while(naviosCont!=0||input==-1) {
 			imprimir(apelido +" Escolha qual navio deseja posicionar:");
 			for(int j = 1 ; j<=naviosCont ; j++) {
@@ -97,7 +95,7 @@ public class BatalhaNaval {
 			int escolha = cont[input-1];
 //			remove o numero referente ao navio escolhido do array cont e 'recua' os valores seguintes ex:
 //			se input = 2 quando cont={1,2,3,4}, o for resultaria em cont={1,3,4,4};
-			for(int i=input-1 ; i< navios-1 ; i++) {
+			for(int i=input-1 ; i< NAVIOS-1 ; i++) {
 				cont[i]=cont[i+1];
 			}
 				
@@ -183,7 +181,7 @@ public class BatalhaNaval {
 					posicao[pontoFinal[0]+(-i*index0)][pontoFinal[1]+(-i*index1)]= 'X';
 					memoriaTemporariaDePosicao[pontoFinal[0]+(-i*index0)][pontoFinal[1]+(-i*index1)]=1;
 					//a linha seguinte mostraria os 'X' sendo desenhados
-//					drawBoard(memoriaTemporariaDePosicao, posicao);
+					drawBoard(memoriaTemporariaDePosicao, posicao);
 					vida++;
 				}
 				return vida;
