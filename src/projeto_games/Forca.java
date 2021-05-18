@@ -1,101 +1,137 @@
 package projeto_games;
 
-//lucas was here
 import java.util.Scanner;
 
-
 public class Forca {
-	public static Scanner sc = new Scanner(System.in);
-	public static void main(String[] args) {
-		inicio();
-	
-	}
+
+	static Scanner ed = new Scanner(System.in);
+
 	public static void inicio() {
-		System.out.println("---------------------------------------------");
-		System.out.println("Digite a palavra escolhida:");
-		String palavra = sc.next();
-		String palavraMaior = palavra.toUpperCase();
-		String sublin = "";
-		for (int i = 0; i < palavra.length(); i++) {
-			sublin += "_ ";
-			}
-		System.out.println(sublin);
-		
-		
-		// Implementar funcionalidade de dica
-		// Implementar preenchimento de letras 
-		// Implementar mais de um acerto pra uma só letra
-		int erro = 0, acerto = 0;
-		String frase = "";
+		// Método para iniciar o jogo
+		int erro = 0;
+		String patent = "", letras = "";
+		String palavra = palavraOculta();
+		desenho(erro);
+		sublin(palavra);
 		while (true) {
-			//System.out.println();
-			System.out.println("Digite uma letra:");
-			String letra = sc.next();
-			String letraMaior = letra.toUpperCase();
-			if (palavraMaior.contains(letraMaior)) {
-				acerto++;
-				System.out.println("Acertou a letra");
-				frase += letraMaior;
-				System.out.println(frase + " " + sublin.substring(0, sublin.length()- (2 * acerto)));
-			} 
-			else {
-				erro++;// erro começa com 6
-				if (erro < 6) {
-					System.out.println(desenho(erro));
-					System.out.println("Você tem mais " + (6 - erro) + " chances.");
+			char letra = letra();
+			if (letras.indexOf(letra) >= 0) {
+
+				System.out.println("Você já tentou essa letra!");
+
+			} else {
+				letras += letra;
+				if (palavra.indexOf(letra) >= 0) {
+					System.out.println("Você acertou!");
+					desenho(erro);
+					String vz = "";
+					for (int i = 0; i < palavra.length(); i++) {
+
+						vz += letras.indexOf(palavra.charAt(i)) >= 0 ? (palavra.charAt(i)) : "_ ";
+						patent = vz;
+
+					}
+					System.out.println(patent);
+
+					if (patent.equals(palavra)) {
+						System.out.println("Fim de Jogo");
+						break;
+					}
+
 				} else {
-					System.out.println(desenho(erro));
-					System.out.println("Acabaram suas chances.");
+					erro++;
+					System.out.println("Você errou!\nRestam apenas " + (6 - erro) + " tentativas.");
+					desenho(erro);
+					System.out.println(patent);
+					if (erro == 6) {
+						System.out.println("Fim de Jogo");
+						System.out.println("A palavra completa era " + palavra);
+						break;
+					}
 				}
 			}
-			if (acerto == palavraMaior.length()) {
-				System.out.println("VOCÊ GANHOU!!!\n"
-						+ "A palavra é: " + palavraMaior);
-				break;
-			} else if (erro == 6) {
-				System.out.println("VOCÊ PERDEU!!!");
-				break;
-			}
-		}// fim do while
-		
-		
+		}
+		jogVenc(erro);
 	}
-	public static String sub(String palavra) {
-		String sublin = "";
+
+	public static void sublin(String palavra) {
+		// Método para criar uma quantidade de sublinhas igual a quantidade de letras da
+		// palavra oculta,
+		// servindo como dica para o JOGADOR2
 		for (int i = 0; i < palavra.length(); i++) {
 			System.out.print("_ ");
-			}
-		return sublin;
+		}
 	}
-	public static String desenho(int erro) {
+
+	public static char letra() {
+		// Método que captura as letras tentadas pelo JOGADOR2
+		System.out.println("\n JOGADOR2\n----------\nInforme a letra:");
+		char letra = ed.next().toUpperCase().charAt(0);
+		return letra;
+	}
+
+	public static void jogVenc(int erro) {
+		// Método para definir qual foi o jogador vencedor
+		if (erro == 6) {
+			System.out.println("O JOGADOR1 venceu!");
+		} else {
+			System.out.println("O JOGADOR2 venceu!");
+		}
+	}
+
+	public static String palavraOculta() {
+		// Método para obter a palavra oculta do jogador 1
+		System.out.println(" JOGADOR1\n----------\nInforme a palavra a ser adivinhada pelo JOGADOR2:");
+		String palavra = ed.nextLine();
+		palavra = palavra.toUpperCase();
+		return palavra;
+	}
+
+	public static void desenho(int erro) {
+		// Método para desenhar a forca a depender da progressão do erro
 		String des = "";
 		switch (erro) {
 		case 1:
 			des = ("  ______\r\n" + " |      |\r\n" + " |      O\r\n" + " |     \r\n" + " |     \r\n" + " |\r\n"
 					+ " |	\r\n" + "_|___");
+			System.out.println(des);
 			break;
 		case 2:
 			des = ("  ______\r\n" + " |      |\r\n" + " |      O\r\n" + " |      |\r\n" + " |     \r\n" + " |\r\n"
 					+ " |	\r\n" + "_|___");
+			System.out.println(des);
 			break;
 		case 3:
 			des = ("  ______\r\n" + " |      |\r\n" + " |      O\r\n" + " |      |\\\r\n" + " |     \r\n" + " |\r\n"
 					+ " |	\r\n" + "_|___");
+			System.out.println(des);
+
 			break;
 		case 4:
 			des = ("  ______\r\n" + " |      |\r\n" + " |      O\r\n" + " |     /|\\\r\n" + " |     \r\n" + " |\r\n"
 					+ " |	\r\n" + "_|___");
+			System.out.println(des);
+
 			break;
 		case 5:
 			des = ("  ______\r\n" + " |      |\r\n" + " |      O\r\n" + " |     /|\\\r\n" + " |     /\r\n" + " |\r\n"
 					+ " |	\r\n" + "_|___");
+			System.out.println(des);
+
 			break;
 		case 6:
 			des = ("  ______\r\n" + " |      |\r\n" + " |      O\r\n" + " |     /|\\\r\n" + " |     /\\\r\n" + " |\r\n"
 					+ " |	\r\n" + "_|___");
+			System.out.println(des);
+
+			break;
+		default:
+			des = ("  ______\r\n" + " |      |\r\n" + " |      \r\n" + " |     \r\n" + " |     \r\n" + " |\r\n"
+					+ " |	\r\n" + "_|___");
+			System.out.println(des);
+
 			break;
 		}
-		return des;
 	}
 
 }
