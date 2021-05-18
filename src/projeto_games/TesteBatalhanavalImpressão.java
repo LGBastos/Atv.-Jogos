@@ -1,6 +1,7 @@
+package projeto_games;
 import java.util.Scanner;
 //TODO Implementar uma pausa entre os turnos?
-// Pra testar o git, adiciona o nome de vocÍs nesse comentario:
+// Pra testar o git, adiciona o nome de voc√™s nesse comentario:
 //Lucas Bastos ; 
 //Lucas Moreno;
 
@@ -29,7 +30,7 @@ public class TesteBatalhanavalImpress„o {
 	}
 
 	private static void gameStart(String[] nicks, int[][] memoria, int[][] memoria2, char[][] posicao, char[][] posicao2, int vidaP1, int vidaP2, Scanner sc) {
-		//Enquanto tiver o gameEnd(chamado no final do gameTurn n„o precisaria da condiÁ„o no while(poderia ser true)
+		//Enquanto tiver o gameEnd(chamado no final do gameTurn n√£o precisaria da condi√ß√£o no while(poderia ser true)
 		while(true) {
 			vidaP2 = gameTurn(nicks[0], memoria, posicao2,vidaP2, sc);
 			imprimir("vidaP1="+vidaP1+"vidaP2="+vidaP2);
@@ -42,8 +43,8 @@ public class TesteBatalhanavalImpress„o {
 	}
 
 	private static void gameEnd(String string) {
-		imprimir("VitÛria de "+string+"!!!");
-		//TODO quando adicionar os outros jogos, n„o pode sair, precisa voltar para o menu;
+		imprimir("Vit√≥ria de "+string+"!!!");
+		//TODO quando adicionar os outros jogos, n√£o pode sair, precisa voltar para o menu;
 		System.exit(0);
 
 	}
@@ -51,18 +52,18 @@ public class TesteBatalhanavalImpress„o {
 	private static void posInput(String apelido, Scanner sc, char[][] posicao) {
 		// TODO criar switch case para cada navio
 		//coloca X nos pontos entre pontoInicial e pontoFinal
-		imprimir(apelido+" definia a posiÁao do porta aviıes.\n"
+		imprimir(apelido+" definia a posi√ßao do porta avi√µes.\n"
 				+ "Escolha o ponto de inicio, ex: 0 5");
 		int[] pontoInicial = {sc.nextInt(), sc.nextInt()};
 
-		// TODO implementar: mostrar as posiÁoes validas para o pontoFinal
-		imprimir("Agora, escolha entre os possÌveis pontos de fim: ");
+		// TODO implementar: mostrar as posi√ßoes validas para o pontoFinal
+		imprimir("Agora, escolha entre os poss√≠veis pontos de fim: ");
 		int[] pontoFinal = checarPosicoesValidas(pontoInicial, sc);
 
 		// TODO testar: o que acontece quando pontoFinal<pontoInicial
 		int distancia, index0, index1;
 		if(pontoInicial[0]!=pontoFinal[0]) {
-			//se a diferenÁa for na linha
+			//se a diferen√ßa for na linha
 			distancia = pontoFinal[0]-pontoInicial[0];
 			if(distancia>0) {
 				index0 = 1;
@@ -72,7 +73,7 @@ public class TesteBatalhanavalImpress„o {
 			}
 			index1 = 0;
 		}else {
-			// se a diferenÁa for na coluna
+			// se a diferen√ßa for na coluna
 			distancia = pontoFinal[1]-pontoInicial[1];
 			index0 = 0;
 			if(distancia>0) {
@@ -177,7 +178,7 @@ public class TesteBatalhanavalImpress„o {
 		if(hit) {
 			imprimir("Acertou!");
 		}else {
-			imprimir("¡gua!");
+			imprimir("√?gua!");
 		}
 		return vida;
 		
@@ -218,7 +219,7 @@ public class TesteBatalhanavalImpress„o {
 		int[][] posicoesValidas = new int[4][2];
 		do {
 			if(cont>0) {
-				imprimir("Selecione uma opÁ„o v·lida: ");
+				imprimir("Selecione uma op√ß√£o v√°lida: ");
 				cont = 0;
 			}
 			if(paraEsquerda>=0) {
