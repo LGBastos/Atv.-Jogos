@@ -9,7 +9,7 @@ public class Forca {
 	public static void inicio() {
 		// Método para iniciar o jogo
 		int erro = 0;
-		String patent = "", letras = "";
+		String palavraTentada = "", letras = "";
 		String palavra = palavraOculta();
 		desenho(erro);
 		sublin(palavra);
@@ -24,16 +24,19 @@ public class Forca {
 				if (palavra.indexOf(letra) >= 0) {
 					System.out.println("Você acertou!");
 					desenho(erro);
-					String vz = "";
-					for (int i = 0; i < palavra.length(); i++) {
+					
+					palavraTentada = attPalavraTentada(palavra, letras);
+					
+					System.out.println(palavraTentada);
 
-						vz += letras.indexOf(palavra.charAt(i)) >= 0 ? (palavra.charAt(i)) : "_ ";
-						patent = vz;
-
+					String teste = "";
+					for (int i = 0; i < palavraTentada.length(); i++) {
+						if (palavraTentada.charAt(i) != ' ') {
+							teste += palavraTentada.charAt(i);
+						}
 					}
-					System.out.println(patent);
 
-					if (patent.equals(palavra)) {
+					if (palavra.equals(teste)) {
 						System.out.println("Fim de Jogo");
 						break;
 					}
@@ -42,7 +45,7 @@ public class Forca {
 					erro++;
 					System.out.println("Você errou!\nRestam apenas " + (6 - erro) + " tentativas.");
 					desenho(erro);
-					System.out.println(patent);
+					System.out.println(palavraTentada);
 					if (erro == 6) {
 						System.out.println("Fim de Jogo");
 						System.out.println("A palavra completa era " + palavra);
@@ -55,14 +58,23 @@ public class Forca {
 		jogarNovamente();
 	}
 
+	private static String attPalavraTentada(String palavra, String letras) {
+		// Método que vai criar uma string "vz" para atualizar uma variável que acompanha os acertos das letras.
+		String vz = "";
+		for (int i = 0; i < palavra.length(); i++) {
+			vz += letras.indexOf(palavra.charAt(i)) >= 0 ? (palavra.charAt(i) + " ") : "_ ";
+		}
+		return vz;
+	}
+
 	public static void jogarNovamente() {
-		System.out.println("Jogar novamente?\n"
-				+ "(1)Sim\t(2)Não");
+		// Método para repetição do método inicio
+		System.out.println("\n-------------------------\nJogar novamente?\n" + "(1)Sim\t(2)Não");
 		int op = ed.nextInt();
-		if (op==1) {
+		if (op == 1) {
 			Forca.inicio();
 		}
-		
+
 	}
 
 	public static void sublin(String palavra) {
@@ -93,8 +105,7 @@ public class Forca {
 	public static String palavraOculta() {
 		// Método para obter a palavra oculta do jogador 1
 		System.out.println(" JOGADOR1\n----------\nInforme a palavra a ser adivinhada pelo JOGADOR2:");
-		String palavra = ed.nextLine();
-		palavra = palavra.toUpperCase();
+		String palavra = ed.nextLine().toUpperCase();
 		return palavra;
 	}
 
