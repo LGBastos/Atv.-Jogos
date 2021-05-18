@@ -2,7 +2,6 @@ package projeto_games;
 import java.util.Scanner;
 //TODO Implementar uma pausa entre os turnos?
 //TODO retirar memoria2, não nescessária.
-//teste
 
 
 public class BatalhaNaval {
