@@ -4,9 +4,11 @@ import java.util.Scanner;
 
 public class Forca {
 
-	static Scanner ed = new Scanner(System.in);
+	static Scanner ed;
+	
 
 	public static void inicio() {
+		ed = new Scanner(System.in);
 		// Método para iniciar o jogo
 		int erro = 0;
 		String palavraTentada = "", letras = "";
@@ -72,7 +74,7 @@ public class Forca {
 		System.out.println("\n-------------------------\nJogar novamente?\n" + "(1)Sim\t(2)Não");
 		int op = ed.nextInt();
 		if (op == 1) {
-			Forca.inicio();
+		Forca.inicio();
 		}
 
 	}
@@ -105,7 +107,9 @@ public class Forca {
 	public static String palavraOculta() {
 		// Método para obter a palavra oculta do jogador 1
 		System.out.println(" JOGADOR1\n----------\nInforme a palavra a ser adivinhada pelo JOGADOR2:");
+		
 		String palavra = ed.nextLine().toUpperCase();
+
 		return palavra;
 	}
 
