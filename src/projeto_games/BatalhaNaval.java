@@ -1,5 +1,7 @@
 package projeto_games;
 import java.util.Scanner;
+
+import static java.lang.System.*;
 //TODO Implementar uma pausa entre os turnos?
 //TODO retirar memoria2, não nescessária.
 
@@ -8,7 +10,7 @@ public class BatalhaNaval {
 	public static boolean GAME_ON;
 	public static int vidaP1, vidaP2;
 	public static void inicio() {
-		Scanner sc = new Scanner(System.in);
+		Scanner sc = new Scanner(in);
 		
 		String[] nicks = new String[2];
 		char[][] posicao = new char[10][10];
@@ -58,32 +60,23 @@ public class BatalhaNaval {
 		//Conta quantos navios faltam ser posicionados
 		int naviosCont = 4;
 		
-		int input = -1;
-//		numero total de naios
+		int input;
+		//		numero total de naios
 		final int NAVIOS = 4;
 		//controla quais navios são mostrados na tela, independente da ordem de escolha.
 		int[] cont = {1, 2, 3, 4};
 		//cuida para que 2 navios não ocupem um mesmo ponto
 		int[][]memoriaTemporariaDePosicao = new int[10][10];
-		while(naviosCont!=0||input==-1) {
+		while(naviosCont != 0) {
 			imprimir(apelido +" Escolha qual navio deseja posicionar:");
 			for(int j = 1 ; j<=naviosCont ; j++) {
-					
-				switch (cont[j-1]) {
-				case (1):
-					imprimir("("+j+") porta-aviões (cinco quadrados)" );
-					break;
-				case (2):
-					imprimir("("+j+") navios-tanque (quatro quadrados)");
-					break;
-				case(3):
-					imprimir("("+j+") contratorpedeiros (três quadrados)");
-					break;
-				case(4):
-					imprimir("("+j+")  submarinos (dois quadrados)");
-					break;
-				default:
-					throw new IllegalArgumentException("Unexpected value: " + j);
+
+				switch (cont[j - 1]) {
+					case (1) -> imprimir("(" + j + ") porta-aviões (cinco quadrados)");
+					case (2) -> imprimir("(" + j + ") navios-tanque (quatro quadrados)");
+					case (3) -> imprimir("(" + j + ") contratorpedeiros (três quadrados)");
+					case (4) -> imprimir("(" + j + ")  submarinos (dois quadrados)");
+					default -> throw new IllegalArgumentException("Unexpected value: " + j);
 				}
 			}
 			input = sc.nextInt();
@@ -95,36 +88,33 @@ public class BatalhaNaval {
 			int escolha = cont[input-1];
 //			remove o numero referente ao navio escolhido do array cont e 'recua' os valores seguintes ex:
 //			se input = 2 quando cont={1,2,3,4}, o for resultaria em cont={1,3,4,4};
-			for(int i=input-1 ; i< NAVIOS-1 ; i++) {
-				cont[i]=cont[i+1];
-			}
-				
-			
+			arraycopy(cont, input, cont, input - 1, NAVIOS - 1 - (input - 1));
+
+
 //			por conta da maneira que o array cont funciona, o input do usuario faz com que 'escolha' seja um numero de 1 a 4 
 //			equivalente ao navio escolhido, que, no switch/case abaixo, chama o metodo de acordo.
 			switch (escolha) {
-			case (1):
-				vida = definirPosicao(apelido, "porta-aviões", 5, sc, posicao, vida,memoriaTemporariaDePosicao);
-				System.out.println(vida);
-				naviosCont--;
-				break;
-			case (2):
-				vida = definirPosicao(apelido, "navios-tanque", 4, sc, posicao, vida,memoriaTemporariaDePosicao);
-				System.out.println(vida);
-				naviosCont--;
-				break;
-			case(3):
-				vida = definirPosicao(apelido, "contratorpedeiros", 3, sc, posicao, vida,memoriaTemporariaDePosicao);
-				System.out.println(vida);
-				naviosCont--;
-				break;
-			case(4):
-				vida = definirPosicao(apelido, "submarinos ", 2, sc, posicao, vida,memoriaTemporariaDePosicao);
-				System.out.println(vida);
-				naviosCont--;
-				break;
-			default:
-				throw new IllegalArgumentException("Unexpected value: " + input);
+				case (1) -> {
+					vida = definirPosicao(apelido, "porta-aviões", 5, sc, posicao, vida, memoriaTemporariaDePosicao);
+					out.println(vida);
+					naviosCont--;
+				}
+				case (2) -> {
+					vida = definirPosicao(apelido, "navios-tanque", 4, sc, posicao, vida, memoriaTemporariaDePosicao);
+					out.println(vida);
+					naviosCont--;
+				}
+				case (3) -> {
+					vida = definirPosicao(apelido, "contratorpedeiros", 3, sc, posicao, vida, memoriaTemporariaDePosicao);
+					out.println(vida);
+					naviosCont--;
+				}
+				case (4) -> {
+					vida = definirPosicao(apelido, "submarinos ", 2, sc, posicao, vida, memoriaTemporariaDePosicao);
+					out.println(vida);
+					naviosCont--;
+				}
+				default -> throw new IllegalArgumentException("Unexpected value: " + input);
 			}
 		}
 		
@@ -195,18 +185,17 @@ public class BatalhaNaval {
 		pontoInicial[1] = sc.nextInt();
 		//dentro do while é usado "||" , pois caso um dos valores estiver fora do range, ele passa no primeiro teste e nao
 		//entra no segundo(o que causaria  java.lang.ArrayIndexOutOfBoundsException: Index 10 out of bounds for length 10) 
-		while(!(pontoInicial[0]<=9&&pontoInicial[0]>=0&&pontoInicial[1]<=9&&pontoInicial[1]>=0)||memoriaTemporariaDePosicao[pontoInicial[0]][pontoInicial[1]]==1){
+		boolean isValid = pontoInicial[0] <= 9 && pontoInicial[0] >= 0 && pontoInicial[1] <= 9 && pontoInicial[1] >= 0;
+		while(!isValid ||memoriaTemporariaDePosicao[pontoInicial[0]][pontoInicial[1]]==1){
 			imprimir("Valor inválido!");
-			if(!(pontoInicial[0]<=9&&pontoInicial[0]>=0&&pontoInicial[1]<=9&&pontoInicial[1]>=0)) {
+			if(!isValid) {
 				imprimir("Digite um valor entre 0 e 9:");
-				pontoInicial[0] = sc.nextInt();
-				pontoInicial[1] = sc.nextInt();
 			}else {
 				imprimir("Existe um navio posicionado nesse ponto.\n"
 						+ "Escolha outro ponto inicial: ");
-				pontoInicial[0] = sc.nextInt();
-				pontoInicial[1] = sc.nextInt();
 			}
+			pontoInicial[0] = sc.nextInt();
+			pontoInicial[1] = sc.nextInt();
 		}
 		
 		
@@ -246,9 +235,7 @@ public class BatalhaNaval {
 					posicoesValidas[cont][0]=posicaoInicial[0];
 					posicoesValidas[cont][1]=paraEsquerda;
 					cont++;
-					if(cont==1) {
-						imprimir("Agora, escolha entre os possíveis pontos de fim: ");
-					}
+					imprimir("Agora, escolha entre os possíveis pontos de fim: ");
 					imprimir("("+cont+")virado para esquerda:"+posicaoInicial[0] + " " + paraEsquerda);
 					//			posicoesValidas[0][0]=paraEsquerda;
 					//			posicoesValidas[0][1]=posicaoInicial[1];
@@ -323,9 +310,8 @@ public class BatalhaNaval {
 			}
 			if(!(check[0]||check[1]||check[2]||check[3])) {
 				imprimir("Não existem posições válidas!\n");
-				int[] checkout = {-1,0};
-				
-				return checkout;
+
+				return new int[]{-1,0};
 			}
 			
 			posicaoEscolhida = sc.nextInt();
@@ -345,7 +331,7 @@ public class BatalhaNaval {
 // 	mostra onde ja foi atirado, pergunta onde é o proximo tiro e verifica se ali ja foi atirado.
 //	retorna a vida atualizada
 	private static int gameTurn(String apelido, int[][] memoria, char[][] posicao,String apelidoOponente, int vidaOponente, int vida, Scanner sc) {
-		if(GAME_ON==false) return 0;
+		if(!GAME_ON) return 0;
 		
 		imprimir(apelido+"  HP:"+vida+"\n"
 				+ apelidoOponente +" HP:"+vidaOponente );
@@ -442,21 +428,21 @@ public class BatalhaNaval {
 	private static void drawBoard(int[][] memoria, char[][] posicao) {
 		for (int i = 0; i < 11; i++) {
 			for (int j = 0; j < 41; j++) {
-				System.out.print("-");
+				out.print("-");
 			}
 
-			System.out.println();
+			out.println();
 			if(i<10) {
 				for (int j = 0; j < 11; j++) {
 					if(j<10&&memoria[i][j]==1) {
-						System.out.print("| "+posicao[i][j]+" ");
+						out.print("| "+posicao[i][j]+" ");
 						
 					}else {
-						System.out.print("|   ");
+						out.print("|   ");
 					}
 
 				}
-				System.out.println();
+				out.println();
 
 			}
 		}
@@ -465,7 +451,7 @@ public class BatalhaNaval {
 	
 
 	private static void imprimir(String string) {
-		System.out.println(string);
+		out.println(string);
 
 	}
 
