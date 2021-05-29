@@ -9,10 +9,11 @@ import static java.lang.System.*;
 public class BatalhaNaval {
 	public static boolean GAME_ON;
 	public static int vidaP1, vidaP2;
+	public static  final String[] nicks = new String[2];
 	public static void inicio() {
 		Scanner sc = new Scanner(in);
 		
-		String[] nicks = new String[2];
+
 		char[][] posicao = new char[10][10];
 		char[][] posicao2 = new char[10][10];
 		//cuida os pontos nos quais foram atirados
@@ -35,9 +36,9 @@ public class BatalhaNaval {
 		GAME_ON = true;
 		while(GAME_ON) {
 			//turno do player 1
-			vidaP2 = gameTurn(nicks[0], memoria, posicao2,nicks[1],vidaP2, vidaP1, sc);
+			gameTurn(nicks[0], memoria, posicao2,nicks[1], sc);
 			//turno do player 2
-			vidaP1 = gameTurn(nicks[1], memoria2, posicao,nicks[0], vidaP1, vidaP2, sc);
+			gameTurn(nicks[1], memoria2, posicao,nicks[0], sc);
 			
 		}
 
@@ -57,67 +58,72 @@ public class BatalhaNaval {
 	private static int posInput(String apelido, Scanner sc, char[][] posicao, int vida) {
 //		(1) porta-aviões (cinco quadrados), (2) navios-tanque (quatro quadrados), 
 //		(3) contratorpedeiros (três quadrados) e (4) submarinos (dois quadrados)
-		//Conta quantos navios faltam ser posicionados
-		int naviosCont = 4;
-		
-		int input;
-		//		numero total de naios
-		final int NAVIOS = 4;
-		//controla quais navios são mostrados na tela, independente da ordem de escolha.
-		int[] cont = {1, 2, 3, 4};
-		//cuida para que 2 navios não ocupem um mesmo ponto
-		int[][]memoriaTemporariaDePosicao = new int[10][10];
-		while(naviosCont != 0) {
-			imprimir(apelido +" Escolha qual navio deseja posicionar:");
-			for(int j = 1 ; j<=naviosCont ; j++) {
+		//Conta quantos navios faltam ser posicionados	if
+		if(!(nicks[0].equalsIgnoreCase("teste1")&&nicks[1].equalsIgnoreCase("teste2"))){
+			int naviosCont = 4;
 
-				switch (cont[j - 1]) {
-					case (1) -> imprimir("(" + j + ") porta-aviões (cinco quadrados)");
-					case (2) -> imprimir("(" + j + ") navios-tanque (quatro quadrados)");
-					case (3) -> imprimir("(" + j + ") contratorpedeiros (três quadrados)");
-					case (4) -> imprimir("(" + j + ")  submarinos (dois quadrados)");
-					default -> throw new IllegalArgumentException("Unexpected value: " + j);
+			int input;
+			//		numero total de naios
+			final int NAVIOS = 4;
+			//controla quais navios são mostrados na tela, independente da ordem de escolha.
+			int[] cont = {1, 2, 3, 4};
+			//cuida para que 2 navios não ocupem um mesmo ponto
+			int[][]memoriaTemporariaDePosicao = new int[10][10];
+			while(naviosCont != 0) {
+				imprimir(apelido +" Escolha qual navio deseja posicionar:");
+				for(int j = 1 ; j<=naviosCont ; j++) {
+
+					switch (cont[j - 1]) {
+						case (1) -> imprimir("(" + j + ") porta-aviões (cinco quadrados)");
+						case (2) -> imprimir("(" + j + ") navios-tanque (quatro quadrados)");
+						case (3) -> imprimir("(" + j + ") contratorpedeiros (três quadrados)");
+						case (4) -> imprimir("(" + j + ")  submarinos (dois quadrados)");
+						default -> throw new IllegalArgumentException("Unexpected value: " + j);
+					}
 				}
-			}
-			input = sc.nextInt();
-			if(input<=0||input>naviosCont) {
-				imprimir("Opção inválida!");
-				continue;
-			}
+				input = sc.nextInt();
+				if(input<=0||input>naviosCont) {
+					imprimir("Opção inválida!");
+					continue;
+				}
 //			o input é baseado no que é mostrado em tela sendo assim diferente da escolha real, que é o numero no array cont, no index input-1
-			int escolha = cont[input-1];
+				int escolha = cont[input-1];
 //			remove o numero referente ao navio escolhido do array cont e 'recua' os valores seguintes ex:
 //			se input = 2 quando cont={1,2,3,4}, o for resultaria em cont={1,3,4,4};
-			arraycopy(cont, input, cont, input - 1, NAVIOS - 1 - (input - 1));
+				arraycopy(cont, input, cont, input - 1, NAVIOS - 1 - (input - 1));
 
 
-//			por conta da maneira que o array cont funciona, o input do usuario faz com que 'escolha' seja um numero de 1 a 4 
+//			por conta da maneira que o array cont funciona, o input do usuario faz com que 'escolha' seja um numero de 1 a 4
 //			equivalente ao navio escolhido, que, no switch/case abaixo, chama o metodo de acordo.
-			switch (escolha) {
-				case (1) -> {
-					vida = definirPosicao(apelido, "porta-aviões", 5, sc, posicao, vida, memoriaTemporariaDePosicao);
-					out.println(vida);
-					naviosCont--;
+				switch (escolha) {
+					case (1) -> {
+						vida = definirPosicao(apelido, "porta-aviões", 5, sc, posicao, vida, memoriaTemporariaDePosicao);
+						naviosCont--;
+					}
+					case (2) -> {
+						vida = definirPosicao(apelido, "navios-tanque", 4, sc, posicao, vida, memoriaTemporariaDePosicao);
+						naviosCont--;
+					}
+					case (3) -> {
+						vida = definirPosicao(apelido, "contratorpedeiros", 3, sc, posicao, vida, memoriaTemporariaDePosicao);
+						naviosCont--;
+					}
+					case (4) -> {
+						vida = definirPosicao(apelido, "submarinos ", 2, sc, posicao, vida, memoriaTemporariaDePosicao);
+						naviosCont--;
+					}
+					default -> throw new IllegalArgumentException("Unexpected value: " + input);
 				}
-				case (2) -> {
-					vida = definirPosicao(apelido, "navios-tanque", 4, sc, posicao, vida, memoriaTemporariaDePosicao);
-					out.println(vida);
-					naviosCont--;
-				}
-				case (3) -> {
-					vida = definirPosicao(apelido, "contratorpedeiros", 3, sc, posicao, vida, memoriaTemporariaDePosicao);
-					out.println(vida);
-					naviosCont--;
-				}
-				case (4) -> {
-					vida = definirPosicao(apelido, "submarinos ", 2, sc, posicao, vida, memoriaTemporariaDePosicao);
-					out.println(vida);
-					naviosCont--;
-				}
-				default -> throw new IllegalArgumentException("Unexpected value: " + input);
 			}
+
+		}else{
+			int[][]memoriaTemporariaDePosicao = new int[10][10];
+			vida = definirPosicao(apelido, "porta-aviões", 5, sc, posicao, vida, memoriaTemporariaDePosicao);
+			vida = definirPosicao(apelido, "navios-tanque", 4, sc, posicao, vida, memoriaTemporariaDePosicao);
+			vida = definirPosicao(apelido, "contratorpedeiros", 3, sc, posicao, vida, memoriaTemporariaDePosicao);
+			vida = definirPosicao(apelido, "submarinos ", 2, sc, posicao, vida, memoriaTemporariaDePosicao);
 		}
-		
+
 		return vida;
 		
 		
@@ -128,54 +134,93 @@ public class BatalhaNaval {
 	//incrementa a vida passada como parametro em 1, para cada 'X' marcado no array
 	//retorna o valor final da vida
 	private static int definirPosicao(String apelido, String tipoNavio, int tamanho, Scanner sc, char[][] posicao, int vida, int[][] memoriaTemporariaDePosicao) {
-				imprimir(apelido+" definia a posiçao do "+tipoNavio+".\n"
-						+ "Escolha o ponto de inicio, ex: 0 5");
-				int[] pontoInicial = checarPontoInicial(sc, memoriaTemporariaDePosicao);
 
-				
-				
-				int[] pontoFinal = checarPosicoesValidas(pontoInicial, sc, tamanho, memoriaTemporariaDePosicao);
-				while(pontoFinal[0]==-1) {
-					imprimir("Escolha um novo ponto de inicio:");
-					pontoInicial = checarPontoInicial(sc, memoriaTemporariaDePosicao);
-					pontoFinal = checarPosicoesValidas(pontoInicial, sc, tamanho, memoriaTemporariaDePosicao);
-				}
-				
-				int distancia, index0, index1;
-				//index = 1 quando pontoFinal for maior que inicial e -1 quando for menor.
-				if(pontoInicial[0]!=pontoFinal[0]) {
-					//se a diferença for na linha
-					distancia = pontoFinal[0]-pontoInicial[0];
-					if(distancia>0) {
-						index0 = 1;
-					}else {
-						index0 = -1;
-						distancia *= -1;
-					}
-					index1 = 0;
+		if (!(nicks[0].equalsIgnoreCase("teste1")&&nicks[1].equalsIgnoreCase("teste2"))) {
+			imprimir(apelido+" definia a posiçao do "+tipoNavio+".\n"
+							+ "Escolha o ponto de inicio, ex: 0 5");
+			int[] pontoInicial = checarPontoInicial(sc, memoriaTemporariaDePosicao);
+
+
+			int[] pontoFinal = checarPosicoesValidas(pontoInicial, sc, tamanho, memoriaTemporariaDePosicao);
+			while(pontoFinal[0]==-1) {
+				imprimir("Escolha um novo ponto de inicio:");
+				pontoInicial = checarPontoInicial(sc, memoriaTemporariaDePosicao);
+				pontoFinal = checarPosicoesValidas(pontoInicial, sc, tamanho, memoriaTemporariaDePosicao);
+			}
+
+			int distancia, index0, index1;
+			//index = 1 quando pontoFinal for maior que inicial e -1 quando for menor.
+			if(pontoInicial[0]!=pontoFinal[0]) {
+				//se a diferença for na linha
+				distancia = pontoFinal[0]-pontoInicial[0];
+				if(distancia>0) {
+					index0 = 1;
 				}else {
-					// se a diferença for na coluna
-					distancia = pontoFinal[1]-pontoInicial[1];
-					if(distancia>0) {
-						index1 = 1;
-					}else {
-						index1 = -1;
-						distancia *= -1;
-					}
-					index0 = 0;
+					index0 = -1;
+					distancia *= -1;
+				}
+				index1 = 0;
+			}else {
+				// se a diferença for na coluna
+				distancia = pontoFinal[1]-pontoInicial[1];
+				if(distancia>0) {
+					index1 = 1;
+				}else {
+					index1 = -1;
+					distancia *= -1;
+				}
+				index0 = 0;
 
+			}
+			//Quando index = 0 não altera a linha/coluna, quando index=1 começa no ponto
+			//Final e diminui até o Inicial, quando index=-1 começa no ponto Final e aumenta até o Inicial
+			for (int i = 0; i <= distancia; i++) {
+				posicao[pontoFinal[0]+(-i*index0)][pontoFinal[1]+(-i*index1)]= 'X';
+				memoriaTemporariaDePosicao[pontoFinal[0]+(-i*index0)][pontoFinal[1]+(-i*index1)]=1;
+				//a linha seguinte mostraria os 'X' sendo desenhados
+				drawBoard(memoriaTemporariaDePosicao, posicao);
+				vida++;
+			}
+			return vida;
+		} else {
+			int[] pontoInicial = {0, tamanho};
+			int[] pontoFinal = {tamanho, tamanho};
+			int distancia, index0, index1;
+			//index = 1 quando pontoFinal for maior que inicial e -1 quando for menor.
+			if(pontoInicial[0]!=pontoFinal[0]) {
+				//se a diferença for na linha
+				distancia = pontoFinal[0]-pontoInicial[0];
+				if(distancia>0) {
+					index0 = 1;
+				}else {
+					index0 = -1;
+					distancia *= -1;
 				}
-				//Quando index = 0 não altera a linha/coluna, quando index=1 começa no ponto 
-				//Final e diminui até o Inicial, quando index=-1 começa no ponto Final e aumenta até o Inicial
-				for (int i = 0; i <= distancia; i++) {
-					posicao[pontoFinal[0]+(-i*index0)][pontoFinal[1]+(-i*index1)]= 'X';
-					memoriaTemporariaDePosicao[pontoFinal[0]+(-i*index0)][pontoFinal[1]+(-i*index1)]=1;
-					//a linha seguinte mostraria os 'X' sendo desenhados
-					drawBoard(memoriaTemporariaDePosicao, posicao);
-					vida++;
+				index1 = 0;
+			}else {
+				// se a diferença for na coluna
+				distancia = pontoFinal[1]-pontoInicial[1];
+				if(distancia>0) {
+					index1 = 1;
+				}else {
+					index1 = -1;
+					distancia *= -1;
 				}
-				return vida;
-		
+				index0 = 0;
+
+			}
+			//Quando index = 0 não altera a linha/coluna, quando index=1 começa no ponto
+			//Final e diminui até o Inicial, quando index=-1 começa no ponto Final e aumenta até o Inicial
+			for (int i = 0; i <= distancia; i++) {
+				posicao[pontoFinal[0]+(-i*index0)][pontoFinal[1]+(-i*index1)]= 'X';
+				memoriaTemporariaDePosicao[pontoFinal[0]+(-i*index0)][pontoFinal[1]+(-i*index1)]=1;
+				//a linha seguinte mostraria os 'X' sendo desenhados
+				drawBoard(memoriaTemporariaDePosicao, posicao);
+				vida++;
+			}
+			return vida;
+		}
+
 	}
 //	confere se a posiçao escolhida pelo usuário é válida(valores entre [0,9] e não existe um navio no ponto escolhido
 //	retorna um array[2] com a linha e a coluna do ponto inicial.
@@ -328,89 +373,82 @@ public class BatalhaNaval {
 			}
 		}		
 	}
-// 	mostra onde ja foi atirado, pergunta onde é o proximo tiro e verifica se ali ja foi atirado.
-//	retorna a vida atualizada
-	private static int gameTurn(String apelido, int[][] memoria, char[][] posicao,String apelidoOponente, int vidaOponente, int vida, Scanner sc) {
-		if(!GAME_ON) return 0;
-		
-		imprimir(apelido+"  HP:"+vida+"\n"
-				+ apelidoOponente +" HP:"+vidaOponente );
-		
-		//		int[] tiro= {-1,0};
-		//		do{
-		//			if(tiro[0]!=-1) {
-		//				memoria[tiro[0]][tiro[1]]=1;				
-		//			}
-		//			for (int i = 0; i < 11; i++) {
-		//				for (int j = 0; j < 41; j++) {
-		//					System.out.print("-");
-		//				}
-		//				
-		//				System.out.println();
-		//				if(i<10) {
-		//					for (int j = 0; j < 11; j++) {
-		//						if(j<10&&memoria[i][j]==1) {
-		//							System.out.print("| "+posicao[i][j]+" ");
-		//						}else {
-		//							System.out.print("|   ");
-		//						}
-		//						
-		//					}
-		//					System.out.println();
-		//					
-		//				}
-		//				
-		//			}
-		//			
-		//			tiro[0] = sc.nextInt();
-		//			tiro[1] = sc.nextInt();
-		//		}while(tiro[0]!=-1);
-		
-
-		int vidaAtt = shot(apelido, memoria, posicao, vidaOponente, sc);
-		if(vidaAtt==0) {
-			gameEnd(apelido);
-		}else if(vidaAtt<vidaOponente) {
-			imprimir("Acertou!\n"
-					+ "Jogue novamente:");
-			
-			vidaAtt = gameTurn(apelido, memoria, posicao,apelidoOponente, vidaAtt, vida, sc);
+	/*inicia o turno do jogador "apelido", caso o jogo ainda não tenha acabado*/
+	private static void gameTurn(String apelido, int[][] memoria, char[][] posicao,String apelidoOponente, Scanner sc) {
+		if (GAME_ON) {
+			shot(apelido, apelidoOponente, memoria, posicao, sc);
 		}
-		return vidaAtt;
-
 
 
 	}
-//	recebe o ponto atirado e avalia se acertou navio ou água
-//	se acertou um navio, decrementa a vida
-//	retorna a vida atualizada
-	private static int shot(String apelido, int[][] memoria, char[][] posicao, int vida, Scanner sc) {
-		
-		imprimir(apelido + " escolha onde deseja atirar, ex: 5 5");
-		drawBoard(memoria, posicao);
-
-		int[] tiro = {sc.nextInt(),sc.nextInt()};
-//		cuida para que o tiro ocorra num ponto que ainda não foi alvo (memoria[tiro[0]][tiro[1]] == 0)
-		while(memoria[tiro[0]][tiro[1]]==1) {
-			imprimir("Já atirou em : "+tiro[0]+" "+tiro[1]+"\n"
-					+ "escolha outro alvo:");
+	/*retorna false, caso o jogo deva acabar*/
+	private static boolean attVida(String apelidoOponente, String apelido, char[][] posicao, int[][] memoria) {
+		if(apelidoOponente ==nicks[0]) vidaP1 --;
+		else vidaP2 --;
+		if(vidaP1==0||vidaP2==0) {
 			drawBoard(memoria, posicao);
-			tiro[0]=sc.nextInt();
-			tiro[1]=sc.nextInt();
+			gameEnd(apelido);
+			return false;
 		}
+		imprimir("Acertou!\n"
+				+ "Jogue novamente:");
+		return true;
+
+	}
+
+	private static void displayHP() {
+		for (int i=0 ; i<55 ; i++){
+			out.print(" ");
+		}
+		imprimir(nicks[0] +"  HP:"+vidaP1);
+		for (int i=0 ; i<55 ; i++){
+			out.print(" ");
+		}
+		imprimir(nicks[1] +"  HP:"+vidaP2);
+	}
+
+	//	recebe o ponto atirado e avalia se acertou navio ou água
+//	se acertou um navio, atualiza a vida e repete
+	private static void shot(String apelido, String apelidoOponente, int[][] memoria, char[][] posicao, Scanner sc) {
+
+		boolean playAgain;
+		do {
+			displayHP();
+			drawBoard(memoria, posicao);
+			imprimir(apelido + " escolha onde deseja atirar, ex: 5 5");
+
+			int[] tiro = {sc.nextInt(),sc.nextInt()};
+			/*Cuida para que os valores de tiro estejam dentro do intervalo [0,9]
+			* // TODO: 28/05/2021 criar metodo que faça isso, uma entrada por vez e que trate inputMismachExeption */
+			while (!(tiro[0] <= 9 && tiro[0] >= 0 && tiro[1] <= 9 && tiro[1] >= 0)){
+				imprimir("Valor inálido, favor inserir no intervalo [0,9]:");
+				tiro[0] = sc.nextInt();
+				tiro[1] = sc.nextInt();
+			}
+
+//		cuida para que o tiro ocorra num ponto que ainda não foi alvo (memoria[tiro[0]][tiro[1]] == 0)
+			while(memoria[tiro[0]][tiro[1]]==1) {
+				imprimir("Já atirou em : "+tiro[0]+" "+tiro[1]);
+				drawBoard(memoria, posicao);
+				imprimir("escolha outro alvo:");
+				tiro[0]=sc.nextInt();
+				tiro[1]=sc.nextInt();
+			}
 //		persiste a informação que esse ponto ja foi atirado.
-		memoria[tiro[0]][tiro[1]]=1;
-		
+			memoria[tiro[0]][tiro[1]]=1;
+
 //		depois de dado o tiro, checa se existia um navio no ponto e decrementa a vida caso sim e imprime "Água!" caso não.
-		if(posicao[tiro[0]][tiro[1]]=='X') {
-			vida--;
-		}else {
-			imprimir("Água!");
-		}
+			if(posicao[tiro[0]][tiro[1]]=='X') {
+				playAgain = attVida(apelidoOponente, apelido, posicao, memoria);
+
+			}else {
+				playAgain = false;
+				imprimir("Água!");
+			}
 //		for (int i = 0; i < 10; i++) {
 //				for (int j = 0; j < 10; j++) {
 //					if(memoria[i][j]==1) {
-////						
+////
 //						if (posicao[i][j]=='X'&i==tiro[0]&&j==tiro[1]) {
 //							vida--;
 //							hit = true;
@@ -420,32 +458,40 @@ public class BatalhaNaval {
 //
 //
 //			}
-		
-		return vida;
-		
+		} while (playAgain);
+
+
 	}
 //	desenha o tabuleiro
 	private static void drawBoard(int[][] memoria, char[][] posicao) {
+		out.print("  ");
+		for (int j = 0; j <=9; j++) {
+			out.print("   "+j+"  ");
+		}
+		out.println();
 		for (int i = 0; i < 11; i++) {
-			for (int j = 0; j < 41; j++) {
+			out.print("  ");
+			for (int j = 0; j < 61; j++) {
 				out.print("-");
 			}
 
 			out.println();
 			if(i<10) {
+				out.print(i+" ");
 				for (int j = 0; j < 11; j++) {
 					if(j<10&&memoria[i][j]==1) {
-						out.print("| "+posicao[i][j]+" ");
+						out.print("|  "+posicao[i][j]+"  ");
 						
 					}else {
-						out.print("|   ");
+						out.print("|     ");
 					}
 
 				}
-				out.println();
+				out.println("");
 
 			}
 		}
+		out.println("\n");
 		
 	}
 	
