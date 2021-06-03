@@ -1,13 +1,15 @@
 package projeto_games;
 import java.util.Scanner;
 
+import static java.lang.System.out;
+
 public class JogoDaVelha {
-	private int jogo[][] = new int[3][3];
-	private static Scanner sc = new Scanner(System.in);
+	private final char[][] tabuleiro = new char[3][3];
+	private final static Scanner sc = new Scanner(System.in);
 	public JogoDaVelha() {
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
-				jogo[i][j] = 0;
+				tabuleiro[i][j] = ' ';
 			}
 		}
 	}
@@ -15,68 +17,96 @@ public class JogoDaVelha {
 	public void mostrar() {
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
-				System.out.print(jogo[i][j] + " ");
+				System.out.print(tabuleiro[i][j] + " ");
 			}
 			System.out.println();
 		}
 	}
+	private void drawBoard(char[][] posicao) {
+//		out.print("  ");
+//		for (int j = 0; j <posicao.length; j++) {
+//			out.print("   "+j+"  "); imprimiria o numero das colunas
+//		}
+		out.println();
+		for (int i = 0; i < posicao.length+1; i++) {
+			out.print("  ");
+			for (int j = 0; j < posicao.length*6+1; j++) {
+				out.print("-");
+			}
 
-	public int verificar() {
+			out.println();
+			if(i<posicao.length) {
+//				out.print(i+" "); imprimiria os numeros das linhas
+				for (int j = 0; j < posicao.length+1; j++) {
+					if(j<posicao.length) {
+						out.print("|  "+posicao[i][j]+"  ");
+
+					}
+
+				}
+				out.println("|");
+
+			}
+		}
+		out.println("\n");
+
+	}
+	public char verificar() {
 		for (int i = 0; i < 3; i++) {
-			if ((jogo[i][0] == jogo[i][1]) &&
-				(jogo[i][0] == jogo[i][2])) {
-				if (jogo[i][0] != 0) {
-					return jogo[i][0];
+			if ((tabuleiro[i][0] == tabuleiro[i][1]) &&
+				(tabuleiro[i][0] == tabuleiro[i][2])) {
+				if (tabuleiro[i][0] != 0) {
+					return tabuleiro[i][0];
 				}
 			}
 		}
 		for (int j = 0; j < 3; j++) {
-			if ((jogo[0][j] == jogo[1][j]) &&
-				(jogo[0][j] == jogo[2][j]) &&
-				(jogo[0][j] != 0)) {
-				return jogo[0][j];
+			if ((tabuleiro[0][j] == tabuleiro[1][j]) &&
+				(tabuleiro[0][j] == tabuleiro[2][j]) &&
+				(tabuleiro[0][j] != 0)) {
+				return tabuleiro[0][j];
 			}
 		}
-		if ((jogo[0][0] == jogo[1][1]) &&
-			(jogo[0][0] == jogo[2][2]) &&
-			(jogo[0][0] != 0)) {
-			return jogo[0][0];
+		if ((tabuleiro[0][0] == tabuleiro[1][1]) &&
+			(tabuleiro[0][0] == tabuleiro[2][2]) &&
+			(tabuleiro[0][0] != 0)) {
+			return tabuleiro[0][0];
 		}
-		if ((jogo[0][2] == jogo[1][1]) &&
-			(jogo[0][2] == jogo[2][0]) &&
-			(jogo[0][2] != 0)) {
-			return jogo[0][2];
+		if ((tabuleiro[0][2] == tabuleiro[1][1]) &&
+			(tabuleiro[0][2] == tabuleiro[2][0]) &&
+			(tabuleiro[0][2] != 0)) {
+			return tabuleiro[0][2];
 		}
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
-				if (jogo[i][j] == 0) {
-					return 0;
+				if (tabuleiro[i][j] == ' ') {
+					return ' ';
 				}
 			}
 		}
-		return 3;
+		return 'E';
 	}
 	
-	 boolean efetuarJogada(int jogador, int linha, int coluna) {
+	 boolean efetuarJogada(char jogador, int linha, int coluna) {
 		if ((linha < 0) || (linha > 2)) {
 			return false;
 		}
 		if ((coluna < 0) || (coluna > 2)) {
 			return false;
 		}
-		if (jogo[linha][coluna] != 0) {
+		if (tabuleiro[linha][coluna] != ' ') {
 			return false;
 		}
-		jogo[linha][coluna] = jogador;
+		tabuleiro[linha][coluna] = jogador;
 		return true;
 	}
 
 	public static void inicio() {
 		JogoDaVelha jogo = new JogoDaVelha();
-		int jogador = 1;
-		int vencedor = jogo.verificar();
-		jogo.mostrar();
-		while (vencedor == 0) {
+		char jogador = 'X';
+		char vencedor = jogo.verificar();
+		jogo.drawBoard(jogo.tabuleiro);
+		while (vencedor == ' ') {
 			System.out.println("Jogador " + jogador);
 			System.out.print("Linha: ");
 			int linha = sc.nextInt();
@@ -85,19 +115,19 @@ public class JogoDaVelha {
 			if (!jogo.efetuarJogada(jogador, linha-1, coluna-1)) {
 				System.out.println("Jogada inválida...");
 			} else {
-				jogador = (jogador == 1) ? 2 : 1;
+				jogador = (jogador == 'X') ? 'O' : 'X';
 			}
-			jogo.mostrar();
+			jogo.drawBoard(jogo.tabuleiro);
 			vencedor = jogo.verificar();
 		}
 		switch (vencedor) {
-		case 1 :
-			System.out.println("Vencedor jogador 1");
+		case 'X' :
+			System.out.println("Vencedor jogador 'X'");
 			break;
-		case 2:
-			System.out.println("Vencedor jogador 2");
+		case 'O':
+			System.out.println("Vencedor jogador 'O'");
 			break;
-		case 3:
+		case 'E':
 			System.out.println("Empate");
 			break;
 		}

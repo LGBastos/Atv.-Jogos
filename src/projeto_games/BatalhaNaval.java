@@ -428,20 +428,20 @@ public class BatalhaNaval {
 //	desenha o tabuleiro
 	private static void drawBoard(int[][] memoria, char[][] posicao) {
 		out.print("  ");
-		for (int j = 0; j <=9; j++) {
+		for (int j = 0; j <posicao.length; j++) {
 			out.print("   "+j+"  ");
 		}
 		out.println();
-		for (int i = 0; i < 11; i++) {
+		for (int i = 0; i < posicao.length+1; i++) {
 			out.print("  ");
 			for (int j = 0; j < 61; j++) {
 				out.print("-");
 			}
 
 			out.println();
-			if(i<10) {
+			if(i<posicao.length) {
 				out.print(i+" ");
-				for (int j = 0; j < 11; j++) {
+				for (int j = 0; j < posicao.length+1; j++) {
 					if(j<10&&memoria[i][j]==1) {
 						out.print("|  "+posicao[i][j]+"  ");
 						
