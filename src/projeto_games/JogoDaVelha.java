@@ -131,6 +131,15 @@ public class JogoDaVelha {
 			System.out.println("Empate");
 			break;
 		}
+		jogarNovamente();
 	}
-	 
+	public static void jogarNovamente() {
+		// Método para repetição do método inicio
+		System.out.println("\n-------------------------\nJogar novamente?\n(1)Sim\t(2)Não");
+		int op = sc.nextInt();
+		if (op == 1) {
+			JogoDaVelha.inicio();
+		}
+
+	}
 }
