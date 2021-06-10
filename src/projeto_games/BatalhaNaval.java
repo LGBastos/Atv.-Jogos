@@ -13,28 +13,28 @@ public class BatalhaNaval {
 	public static void inicio() {
 
 
-		char[][] posicao = new char[10][10];
+		char[][] posicao1 = new char[10][10];
 		char[][] posicao2 = new char[10][10];
 		//cuida os pontos nos quais foram atirados
-		int[][] memoria = new int[10][10];
+		int[][] memoria1 = new int[10][10];
 		int[][] memoria2 = new int[10][10];
 		
-		gameStart(memoria, memoria2, posicao, posicao2);
+		gameStart(memoria1, memoria2, posicao1, posicao2);
 		
 	}
 
-	private static void gameStart(int[][] memoria, int[][] memoria2, char[][] posicao, char[][] posicao2) {
+	private static void gameStart(int[][] memoria1, int[][] memoria2, char[][] posicao1, char[][] posicao2) {
 		getNicks();
-		createBoard(posicao);
+		createBoard(posicao1);
 		createBoard(posicao2);
-		vidaP1 = posInput(nicks[0], posicao, vidaP1);
+		vidaP1 = posInput(nicks[0], posicao1, vidaP1);
 		vidaP2 = posInput(nicks[1], posicao2, vidaP2);
 		GAME_ON = true;
 		while(GAME_ON) {
 			//turno do player 1
-			gameTurn(nicks[0], memoria, posicao2,nicks[1]);
+			gameTurn(nicks[0], memoria1, posicao2,nicks[1]);
 			//turno do player 2
-			gameTurn(nicks[1], memoria2, posicao,nicks[0]);
+			gameTurn(nicks[1], memoria2, posicao1,nicks[0]);
 			
 		}
 
@@ -190,18 +190,19 @@ public class BatalhaNaval {
 		}
 		//Quando index = 0 não altera a linha/coluna, quando index=1 começa no ponto
 		//Final e diminui até o Inicial, quando index=-1 começa no ponto Final e aumenta até o Inicial
+
 		for (int i = 0; i <= distancia; i++) {
 			posicao[pontoFinal[0] + (-i * index0)][pontoFinal[1] + (-i * index1)] = 'X';
 			memoriaTemporariaDePosicao[pontoFinal[0] + (-i * index0)][pontoFinal[1] + (-i * index1)] = 1;
 			//a linha seguinte mostraria os 'X' sendo desenhados
-			drawBoard(memoriaTemporariaDePosicao, posicao);
+
+
 			vida++;
 		}
+		drawBoard(memoriaTemporariaDePosicao, posicao);
 		return vida;
 	}
 
-	//	confere se a posiçao escolhida pelo usuário é válida(valores entre [0,9] e não existe um navio no ponto escolhido
-//	retorna um array[2] com a linha e a coluna do ponto inicial.
 	private static int[] checarPontoInicial( int[][] memoriaTemporariaDePosicao) {
 		int[] pontoInicial = new int[2];
 		lineSelect(pontoInicial);
@@ -215,25 +216,15 @@ public class BatalhaNaval {
 				columSelect(pontoInicial);
 		}
 
-		
+
 		return pontoInicial;
 	}
-
-	private static void lineSelect(int[] arrayPonto) {
-		imprimir("Informe a linha(de 0 à 9):");
-		arrayPonto[0] = inputInt();
-	}
-	public static void columSelect(int[] arrayPonto){
-		imprimir("Informe a coluna(de 0 à 9):");
-		arrayPonto[1]=inputInt();
-	}
-
 	//avalia se existem opções válidas
 	//imprime as posiçoes possíveis
 	//recebe o input e avalia se é uma das opções
 	//retorna um array[2] com o ponto final do navio ou um array={-1,0} caso não existam opções válidas.
 	private static int[] checarPosicoesValidas(int[] posicaoInicial, int tamanhoNavio, int[][] memoriaTemporariaDePosicao) {
-		
+
 		int paraEsquerda = posicaoInicial[1]-tamanhoNavio+1;
 		int paraDireita = posicaoInicial[1]+tamanhoNavio-1;
 		int paraCima = posicaoInicial[0]-tamanhoNavio+1;
@@ -241,13 +232,13 @@ public class BatalhaNaval {
 		int posicaoEscolhida, cont = 0;
 		int[][] posicoesValidas = new int[4][2];
 		boolean[] check= {false, false, false, false};
-		
+
 		do {
 			if(cont>0) {
 				imprimir("Opção inválida!");
 				cont = 0;
 			}
-			
+
 			if(paraEsquerda>=0) {
 				for(int i = posicaoInicial[1]; i>=paraEsquerda ; i--) {
 					if(memoriaTemporariaDePosicao[posicaoInicial[0]][i]==1) {
@@ -286,7 +277,7 @@ public class BatalhaNaval {
 					imprimir("("+cont+")virado para direita:"+posicaoInicial[0] + " " + paraDireita);
 					//			posicoesValidas[1][0]=paraDireita;
 					//			posicoesValidas[1][1]=posicaoInicial[1];
-					
+
 				}
 			}
 			if(paraCima>=0) {
@@ -308,7 +299,7 @@ public class BatalhaNaval {
 					imprimir("("+cont+")virado para cima:"+paraCima + " " + posicaoInicial[1]);
 					//			posicoesValidas[2][0]=paraCima;
 					//			posicoesValidas[2][1]=posicaoInicial[1];
-					
+
 				}
 			}
 			if(paraBaixo<=9) {
@@ -330,8 +321,8 @@ public class BatalhaNaval {
 					imprimir("("+cont+")virado para baixo:"+paraBaixo + " " + posicaoInicial[1]);
 					//			posicoesValidas[3][0]=paraBaixo;
 					//			posicoesValidas[3][1]=posicaoInicial[1];
-					
-					
+
+
 				}
 			}
 			if(!(check[0]||check[1]||check[2]||check[3])) {
@@ -339,11 +330,23 @@ public class BatalhaNaval {
 
 				return new int[]{-1,0};
 			}
-			
+
 			posicaoEscolhida = inputInt();
 		}while(posicaoEscolhida<=0||posicaoEscolhida>cont);
-		
+
 		return posicoesValidas[posicaoEscolhida-1];
+	}
+
+	//	confere se a posiçao escolhida pelo usuário é válida(valores entre [0,9] e não existe um navio no ponto escolhido
+//	retorna um array[2] com a linha e a coluna do ponto inicial.
+	private static void lineSelect(int[] arrayPonto) {
+		imprimir("Informe a linha(de 0 à 9):");
+		arrayPonto[0] = inputInt();
+	}
+
+	public static void columSelect(int[] arrayPonto){
+		imprimir("Informe a coluna(de 0 à 9):");
+		arrayPonto[1]=inputInt();
 	}
 
 	private static void createBoard(char[][] posicao) {
@@ -420,6 +423,7 @@ public class BatalhaNaval {
 
 			}else {
 				imprimir("Água!");
+				playAgain = false;
 			}
 		} while (playAgain);
 
@@ -481,6 +485,7 @@ public class BatalhaNaval {
 					"Informne novamente:");
 			i = inputInt();
 		}
+
 		return i;
 
 	}
