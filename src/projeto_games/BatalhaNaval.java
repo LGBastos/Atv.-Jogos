@@ -227,10 +227,18 @@ public class BatalhaNaval {
 				for(int j = 1 ; j<=naviosCont ; j++) {
 
 					switch (cont[j - 1]) {
-						case (1) -> imprimir("(" + j + ") porta-aviões (cinco quadrados)");
-						case (2) -> imprimir("(" + j + ") navios-tanque (quatro quadrados)");
-						case (3) -> imprimir("(" + j + ") contratorpedeiros (três quadrados)");
-						case (4) -> imprimir("(" + j + ")  submarinos (dois quadrados)");
+						case (1) :
+							imprimir("(" + j + ") porta-aviões (cinco quadrados)");
+							break;
+						case (2) :
+							imprimir("(" + j + ") navios-tanque (quatro quadrados)");
+							break;
+						case (3) :
+							imprimir("(" + j + ") contratorpedeiros (três quadrados)");
+							break;
+						case (4) :
+							imprimir("(" + j + ")  submarinos (dois quadrados)");
+							break;
 					}
 				}
 				input = inputInt(1,naviosCont);
@@ -248,21 +256,25 @@ public class BatalhaNaval {
 //			por conta da maneira que o array cont funciona, o input do usuario faz com que 'escolha' seja um numero de 1 a 4
 //			equivalente ao navio escolhido, que, no switch/case abaixo, chama o metodo de acordo.
 				switch (escolha) {
-					case (1) -> {
+					case (1) : {
 						vida = definirExtremidades(apelido, "porta-aviões", 5, posicao, vida);
 						naviosCont--;
+						break;
 					}
-					case (2) -> {
+					case (2) : {
 						vida = definirExtremidades(apelido, "navios-tanque", 4, posicao, vida);
 						naviosCont--;
+						break;
 					}
-					case (3) -> {
+					case (3) : {
 						vida = definirExtremidades(apelido, "contratorpedeiros", 3, posicao, vida);
 						naviosCont--;
+						break;
 					}
-					case (4) -> {
+					case (4) : {
 						vida = definirExtremidades(apelido, "submarinos ", 2, posicao, vida);
 						naviosCont--;
+						break;
 					}
 				}
 			}
